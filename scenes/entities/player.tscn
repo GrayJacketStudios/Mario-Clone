@@ -1,0 +1,58 @@
+[gd_scene load_steps=10 format=3 uid="uid://dvnr3s7p4n0s"]
+
+[ext_resource type="SpriteFrames" uid="uid://d1l8hjsuxoq7w" path="res://assets/sprites/characters/prot01.res" id="1_yqyr3"]
+[ext_resource type="Script" path="res://scripts/state/StateMachine.gd" id="3_deb7b"]
+[ext_resource type="Script" path="res://scripts/state/entities/player/idle_player_state.gd" id="4_0x00m"]
+[ext_resource type="Script" path="res://scripts/state/entities/player/move_player_state.gd" id="5_j20po"]
+[ext_resource type="Script" path="res://scripts/state/entities/player/falling_playing_state.gd" id="6_lako5"]
+[ext_resource type="Script" path="res://scripts/state/entities/player/stopping_player_state.gd" id="7_hmgua"]
+[ext_resource type="Script" path="res://scripts/state/entities/player/jumping_player_state.gd" id="7_pbdkj"]
+[ext_resource type="Script" path="res://scripts/state/entities/player/hang_corner_player_state.gd" id="8_firj7"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_b2bbr"]
+radius = 13.0
+
+[node name="player" type="CharacterBody2D"]
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("1_yqyr3")
+animation = &"jump"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(-1, 1)
+shape = SubResource("CapsuleShape2D_b2bbr")
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("3_deb7b")
+initial_state = NodePath("falling")
+
+[node name="idle" type="Node" parent="StateMachine" node_paths=PackedStringArray("entitie")]
+script = ExtResource("4_0x00m")
+entitie = NodePath("../..")
+
+[node name="moving" type="Node" parent="StateMachine" node_paths=PackedStringArray("entitie")]
+script = ExtResource("5_j20po")
+entitie = NodePath("../..")
+
+[node name="falling" type="Node" parent="StateMachine" node_paths=PackedStringArray("entitie")]
+script = ExtResource("6_lako5")
+entitie = NodePath("../..")
+
+[node name="jumping" type="Node" parent="StateMachine" node_paths=PackedStringArray("entitie")]
+script = ExtResource("7_pbdkj")
+entitie = NodePath("../..")
+
+[node name="stopping" type="Node" parent="StateMachine" node_paths=PackedStringArray("entitie")]
+script = ExtResource("7_hmgua")
+entitie = NodePath("../..")
+
+[node name="hanging" type="Node" parent="StateMachine" node_paths=PackedStringArray("entitie")]
+script = ExtResource("8_firj7")
+entitie = NodePath("../..")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position_smoothing_enabled = true
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+editor_draw_limits = true

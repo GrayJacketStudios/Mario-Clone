@@ -1,0 +1,46 @@
+[gd_scene load_steps=2 format=3 uid="uid://h03ma534rpfx"]
+
+[ext_resource type="Script" path="res://scripts/helpers/current_info.gd" id="1_kylvj"]
+
+[node name="Control" type="CanvasLayer"]
+script = ExtResource("1_kylvj")
+
+[node name="Panel" type="Panel" parent="."]
+offset_left = 15.0
+offset_top = 18.0
+offset_right = 285.0
+offset_bottom = 189.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxState" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer/HBoxState"]
+layout_mode = 2
+text = "Player state:"
+
+[node name="player_state" type="Label" parent="Panel/VBoxContainer/HBoxState"]
+layout_mode = 2
+text = "current_player_state"
+
+[node name="HBoxAnimation" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer/HBoxAnimation"]
+layout_mode = 2
+text = "Player Animation:"
+
+[node name="player_animation" type="Label" parent="Panel/VBoxContainer/HBoxAnimation"]
+layout_mode = 2
+text = "crnt_plyr_anm"
