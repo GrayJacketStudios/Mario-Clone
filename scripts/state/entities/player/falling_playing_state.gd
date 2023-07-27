@@ -15,17 +15,15 @@ var hangRaycast2 : RayCast2D
 func Enter():
 	animation.play("falling")
 	time = Time.get_unix_time_from_system()
-	var direction = 1 if not animation.flip_h else -1
 	hangRaycast1 = RayCast2D.new()
 	hangRaycast2 = RayCast2D.new()
 	hangRaycast1.position = hangRaycast1Offset
 	hangRaycast2.position = hangRaycast2Offset
 	hangRaycast1.name = "hangRaycasts1"
-	hangRaycast1.target_position = Vector2(20 * direction, 0)
 	entitie.add_child(hangRaycast1)
 	hangRaycast2.name = "hangRaycasts2"
-	hangRaycast2.target_position = Vector2(20 * direction, 0)
 	entitie.add_child(hangRaycast2)
+	detectSpriteDirection()
 
 func Exit():
 	hangRaycast1.queue_free()
@@ -49,21 +47,23 @@ func PhysicsProcess(delta):
 		entitie.velocity.x = lerp(entitie.velocity.x, -100.0, delta)
 	elif Input.is_action_pressed("move_right"):
 		entitie.velocity.x = lerp(entitie.velocity.x, 100.0, delta)
-		animation.flip_h = false
 	if not entitie.is_on_floor():
-		entitie.velocity.y += GRAVITY * delta * 30
+		entitie.velocity.y += GRAVITY * delta * 100
 		entitie.move_and_slide()
 	else:
 		Transitioned.emit(self, "moving")
 	
 func detectSpriteDirection():
-	if not animation.flip_h and entitie.velocity.x > 0:
+	if animation.flip_h and entitie.velocity.x > 0:
 		animation.flip_h = false
-		hangRaycast1.target_position = Vector2(20, 0)
-		hangRaycast2.target_position = Vector2(20, 0)
+		hangRaycast1.target_position = Vector2(20, 20)
+		hangRaycast2.target_position = Vector2(20, 20)
 		hangRaycast1.force_raycast_update()
 		hangRaycast2.force_raycast_update()
 	elif not animation.flip_h and entitie.velocity.x < 0:
 		animation.flip_h = true
-		hangRaycast1.target_position = Vector2(-20, 0)
-		hangRaycast2.target_position = Vector2(-20, 0)
+		hangRaycast1.target_position = Vector2(0, -20)
+		hangRaycast2.target_position = Vector2(0, -20)
+	else:
+		hangRaycast1.target_position = Vector2(20, 0) if not animation.flip_h else Vector2(-20, 0)
+		hangRaycast2.target_position = Vector2(20, 0) if not animation.flip_h else Vector2(-20, 0)
