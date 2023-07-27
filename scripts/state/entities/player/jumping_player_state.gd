@@ -30,7 +30,13 @@ func Exit():
 	hangRaycast2.queue_free()
 	
 func should_hang() -> bool:
-	return not hangRaycast1.is_colliding() and hangRaycast2.is_colliding()
+	var rcFloorCheck : RayCast2D = RayCast2D.new()
+	rcFloorCheck.target_position = Vector2(0, 45)
+	entitie.add_child(rcFloorCheck)
+	rcFloorCheck.force_raycast_update()
+	var isFloorNear =  rcFloorCheck.is_colliding()
+	rcFloorCheck.queue_free()
+	return  not isFloorNear and get_parent().previous_state.name != "hanging" and not hangRaycast1.is_colliding() and hangRaycast2.is_colliding()
 
 func PhysicsProcess(delta):
 	if should_hang():
@@ -40,9 +46,9 @@ func PhysicsProcess(delta):
 	entitie.velocity.y += 9.8 * delta * 30
 	
 	if Input.is_action_pressed("move_left"):
-		entitie.velocity.x = lerp(entitie.velocity.x, -200.0, delta)
+		entitie.velocity.x = lerp(entitie.velocity.x, -100.0, delta)
 	elif Input.is_action_pressed("move_right"):
-		entitie.velocity.x = lerp(entitie.velocity.x, 200.0, delta)
+		entitie.velocity.x = lerp(entitie.velocity.x, 100.0, delta)
 	entitie.move_and_slide()
 	
 	if entitie.velocity.y >= 10:

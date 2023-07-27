@@ -1,5 +1,6 @@
-[gd_scene load_steps=10 format=3 uid="uid://dvnr3s7p4n0s"]
+[gd_scene load_steps=12 format=3 uid="uid://dvnr3s7p4n0s"]
 
+[ext_resource type="Script" path="res://scenes/entities/LSpeed.gd" id="1_3g8jo"]
 [ext_resource type="SpriteFrames" uid="uid://d1l8hjsuxoq7w" path="res://assets/sprites/characters/prot01.res" id="1_yqyr3"]
 [ext_resource type="Script" path="res://scripts/state/StateMachine.gd" id="3_deb7b"]
 [ext_resource type="Script" path="res://scripts/state/entities/player/idle_player_state.gd" id="4_0x00m"]
@@ -8,11 +9,19 @@
 [ext_resource type="Script" path="res://scripts/state/entities/player/stopping_player_state.gd" id="7_hmgua"]
 [ext_resource type="Script" path="res://scripts/state/entities/player/jumping_player_state.gd" id="7_pbdkj"]
 [ext_resource type="Script" path="res://scripts/state/entities/player/hang_corner_player_state.gd" id="8_firj7"]
+[ext_resource type="Script" path="res://scripts/state/entities/player/scalate_player_state.gd" id="9_paj2t"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_b2bbr"]
 radius = 13.0
 
 [node name="player" type="CharacterBody2D"]
+
+[node name="LSpeed" type="Label" parent="."]
+offset_left = 2.0
+offset_top = -30.0
+offset_right = 42.0
+offset_bottom = -7.0
+script = ExtResource("1_3g8jo")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = ExtResource("1_yqyr3")
@@ -49,6 +58,10 @@ entitie = NodePath("../..")
 
 [node name="hanging" type="Node" parent="StateMachine" node_paths=PackedStringArray("entitie")]
 script = ExtResource("8_firj7")
+entitie = NodePath("../..")
+
+[node name="scalate" type="Node" parent="StateMachine" node_paths=PackedStringArray("entitie")]
+script = ExtResource("9_paj2t")
 entitie = NodePath("../..")
 
 [node name="Camera2D" type="Camera2D" parent="."]

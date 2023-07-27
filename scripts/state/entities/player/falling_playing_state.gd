@@ -35,9 +35,10 @@ func check_can_jump() -> bool:
 	return (Input.is_action_just_pressed("jump") and get_parent().previous_state.name == "moving" and Time.get_unix_time_from_system() - time <= 0.2)
 
 func should_hang() -> bool:
-	return not hangRaycast1.is_colliding() and hangRaycast2.is_colliding()
+	return get_parent().previous_state.name != "hanging" and not hangRaycast1.is_colliding() and hangRaycast2.is_colliding()
 
 func PhysicsProcess(delta):
+	detectSpriteDirection()
 	if should_hang():
 		Transitioned.emit(self, "hanging")
 		return
@@ -48,8 +49,21 @@ func PhysicsProcess(delta):
 		entitie.velocity.x = lerp(entitie.velocity.x, -100.0, delta)
 	elif Input.is_action_pressed("move_right"):
 		entitie.velocity.x = lerp(entitie.velocity.x, 100.0, delta)
+		animation.flip_h = false
 	if not entitie.is_on_floor():
 		entitie.velocity.y += GRAVITY * delta * 30
 		entitie.move_and_slide()
 	else:
-		Transitioned.emit(self, "stopping")
+		Transitioned.emit(self, "moving")
+	
+func detectSpriteDirection():
+	if not animation.flip_h and entitie.velocity.x > 0:
+		animation.flip_h = false
+		hangRaycast1.target_position = Vector2(20, 0)
+		hangRaycast2.target_position = Vector2(20, 0)
+		hangRaycast1.force_raycast_update()
+		hangRaycast2.force_raycast_update()
+	elif not animation.flip_h and entitie.velocity.x < 0:
+		animation.flip_h = true
+		hangRaycast1.target_position = Vector2(-20, 0)
+		hangRaycast2.target_position = Vector2(-20, 0)

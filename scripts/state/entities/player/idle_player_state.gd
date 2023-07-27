@@ -5,7 +5,6 @@ class_name IdlePlayerState
 
 func Enter():
 	entitie.get_node("Sprite").play("idle_1")
-	entitie.velocity = Vector2(0, 0)
 
 func PhysicsProcess(delta):
 	if not entitie.is_on_floor() and entitie.velocity.y >= 0:
